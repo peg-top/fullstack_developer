@@ -5,7 +5,7 @@ const Header = ({ title }) => (
     <h1>{title}</h1>
   )
 
-const Content = ({ course, exercises }) => {
+const CourseInfo = ({ course, exercises }) => {
   return (
     <p>
       {course} {exercises}
@@ -38,12 +38,20 @@ const App = () => {
     }
   ]
 
+  const Content = ({ courses }) => {
+    return (
+      <>
+        {courses.map((course) => (
+          <CourseInfo key={course.id} course={course.name} exercises={course.exercises} />
+        ))}
+      </>
+    )}
+  
+
   return (
     <>
       <Header title={coursesTitle} />
-      {courses.map(course => (
-        <Content key={course.id} course={course.name} exercises={course.exercises} />
-      ))}
+      <Content courses={courses} />
       <Total courses={courses} />
     </>
   )
