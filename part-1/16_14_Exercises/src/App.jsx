@@ -46,6 +46,8 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
+  const isShowStatistics = good || neutral || bad
+
   const buttons = [
       {
         id: 1,
@@ -68,7 +70,7 @@ const App = () => {
   return (
     <main>
       <Feedback buttons={buttons} />
-      <Statistics good={good} neutral={neutral} bad={bad} />
+      {isShowStatistics ? <Statistics good={good} neutral={neutral} bad={bad} /> : <p>No feedback given</p>}
     </main>
   )
 }
