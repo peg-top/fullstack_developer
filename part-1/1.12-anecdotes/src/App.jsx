@@ -25,7 +25,7 @@ const App = () => {
   const handleVote = () => {
 
     console.log('handleVote:', selected)
-    console.log('votes:', votes)
+    console.log('votes:', Object.keys(votes))
 
     if (votes[selected]){
       setVotes({
@@ -39,13 +39,33 @@ const App = () => {
       })
     }
   }
+
+  const mostVotes = () => {
+    if (Object.keys(votes).length === 0) return null
+    return Object.keys(votes).reduce((a, b) => votes[a] > votes[b] ? a : b)
+  }
   
   return (
     <>
+    <section>
       <p>{anecdotes[selected]}</p>
       <p>has {votes[selected] || 0} votes</p>
       <button onClick={handleVote}>vote</button>
       <button onClick={handleNextAnectote}>next anecdotes</button>
+    </section>
+    <section>
+      <h1>Anecdote with most votes</h1>
+      {
+        mostVotes() ? (
+          <>
+            <p>{anecdotes[mostVotes()]}</p>
+            <p>has {votes[mostVotes()]} votes</p>
+          </>
+        ) : (
+          <p>No votes yet</p>
+        )
+      }
+    </section>
     </>
   )
 }
