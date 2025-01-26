@@ -1,5 +1,9 @@
 import React from 'react'
 import { useState } from 'react'
+import Filtered from './Filtered'
+import AddPerson from './AddPeson'
+import ShowPeople from './ShowPeople'
+
 
 const App = () =>{
 
@@ -44,39 +48,30 @@ const App = () =>{
   
   return (
     <>
-      <h2>Phonebook</h2>
       <div>
-        <label htmlFor="filter">filter shown with: 
-          <input type="text" id="filter" name="filter" value={filterName} onChange={handleFilterInput}/>
-        </label>
+      <h2>Phonebook</h2>
+        <Filtered
+          filterName={filterName}
+          handleFilterInput={handleFilterInput}
+        />
       </div>
       <div>
         <h2>Add a new</h2>
-        <form id="phoneBook" onSubmit={addPerson}>
-          <div>
-          <label htmlFor="phoneBook">name: 
-            <input type="text" id="phoneBook" name="phoneBook" value={newPersonName} onChange={handleNameInput}/>
-          </label>
-          </div>
-          <div>
-          <label htmlFor="phoneBook">number: 
-            <input type="text" id="phoneBook" name="phoneBook" value={newPersonNumber} onChange={handleNumberInput}/>
-          </label>
-          </div>
-          <button type="submit">add</button>
-        </form>
-        </div>
-        <div>
-      <h2>Numbers</h2>
-      <ul>
-        {persons.map((person) => 
-          person.name.includes(filterName)
-            ? 
-              <li key={person.id}>{person.name} {person.number}</li>
-            : null
-        )}
-      </ul>
-    </div>
+        <AddPerson
+          newPersonName={newPersonName}
+          newPersonNumber={newPersonNumber}
+          handleNameInput={handleNameInput}
+          handleNumberInput={handleNumberInput}
+          addPerson={addPerson}
+        />
+      </div>
+      <div>
+        <h2>Numbers</h2>
+        <ShowPeople
+          persons={persons}
+          filterName={filterName}
+        />
+      </div>
     </>
   )
 }
