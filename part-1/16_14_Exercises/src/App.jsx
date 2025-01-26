@@ -20,19 +20,61 @@ const Btn = ({ text, handleClick }) => {
   )
 }
 
+const StatisticsLine = ({ text, value }) => {
+  return (
+    <li>{text} {value}</li>
+  )
+}
+
 const Statistics = ({ good, neutral, bad }) => {
+
+  const isShowStatistics = good || neutral || bad
+
+  const statistics = [
+    {
+      id: 1,
+      text: 'good',
+      value: () => good
+    },
+    {
+      id: 2,
+      text: 'neutral',
+      value: () => neutral
+    },
+    {
+      id: 3,
+      text: 'bad',
+      value: () => bad
+    },
+    {
+      id: 4,
+      text: 'all',
+      value: () => good + neutral + bad
+    },
+    {
+      id: 5,
+      text: 'average',
+      value: () => (good + neutral + bad) / 3
+    },
+    {
+      id: 6,
+      text: 'positive',
+      value: () => good / (good + neutral + bad) * 100
+    }
+  ]
+
   console.log('Statistics component')
   return (  
     <section>
       <h1>Statistics</h1>
-      <ul>
-        <li>good {good}</li>
-        <li>neutral {neutral}</li>
-        <li>bad {bad}</li>
-        <li>all {good + neutral + bad}</li>
-        <li>average {(good + neutral + bad)/3}</li>
-        <li>positive {good / (good + neutral + bad) * 100} %</li>
-      </ul>
+      {isShowStatistics ? 
+        <ul>
+          {statistics.map(({ id, text, value }) => (
+            <StatisticsLine key={id} text={text} value={value()} />
+          ))}
+        </ul>
+        : <p>No feedback given</p>
+      }
     </section>
   )
 }
@@ -45,8 +87,6 @@ const App = () => {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
-
-  const isShowStatistics = good || neutral || bad
 
   const buttons = [
       {
@@ -70,7 +110,7 @@ const App = () => {
   return (
     <main>
       <Feedback buttons={buttons} />
-      {isShowStatistics ? <Statistics good={good} neutral={neutral} bad={bad} /> : <p>No feedback given</p>}
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </main>
   )
 }
