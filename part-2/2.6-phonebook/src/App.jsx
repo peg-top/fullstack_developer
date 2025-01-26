@@ -19,8 +19,6 @@ const App = () =>{
     })
   }, [])
 
-  
-
   const [persons, setPersons] = useState([])
   const [newPersonName, setNewPerson] = useState('')
   const [newPersonNumber, setNewNumber] = useState('')
@@ -48,11 +46,16 @@ const App = () =>{
       alert(`${newPersonName} is already added to phonebook`)
     } else {
       const newPerson = {
-        id: persons.length + 1,
+        // id: persons.length + 1,
         name: newPersonName,
         number: Math.floor(Math.random() * 100000000)
       }
-      setPersons([...persons, newPerson])
+      // setPersons([...persons, newPerson])
+      axios.post('http://localhost:3001/persons', newPerson).then(response => {
+        console.log('promise fulfilled')
+        console.log(response)
+        setPersons([...persons, response.data])
+      })
       setNewPerson('')
       setNewNumber('')
     }
