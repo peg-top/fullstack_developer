@@ -15,13 +15,18 @@ const App = () =>{
 
   const addPerson = (event) => {
     event.preventDefault()
-    const newPerson = {
-      id: persons.length + 1,
-      name: newPersonName,
-      number: Math.floor(Math.random() * 100000000)
+
+    if (persons.find(person => person.name === newPersonName)) {
+      alert(`${newPersonName} is already added to phonebook`)
+    } else {
+      const newPerson = {
+        id: persons.length + 1,
+        name: newPersonName,
+        number: Math.floor(Math.random() * 100000000)
+      }
+      setPersons([...persons, newPerson])
+      setNewPerson('')
     }
-    setPersons([...persons, newPerson])
-    setNewPerson('')
   }
   
   return (
