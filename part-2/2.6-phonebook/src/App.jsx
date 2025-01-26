@@ -1,13 +1,25 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Filtered from './Filtered'
 import AddPerson from './AddPeson'
 import ShowPeople from './ShowPeople'
+import axios from 'axios'
 
 
 const App = () =>{
 
   console.log('App component')
+
+  useEffect(() => {
+    console.log('effect')
+    axios.get('http://localhost:3001/persons').then(response => {
+      console.log('promise fulfilled')
+      console.log(response)
+      setPersons(response.data)
+    })
+  }, [])
+
+  
 
   const [persons, setPersons] = useState([])
   const [newPersonName, setNewPerson] = useState('')
