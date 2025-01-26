@@ -20,7 +20,7 @@ const App = () => {
   const [selected, setSelected] = useState(Math.floor(Math.random() * anecdotes.length))
   const [votes, setVotes] = useState({})
 
-  const handleNextAnectote = () => setSelected(Math.floor(Math.random() * anecdotes.length))
+  const handleNextAnecdote = () => setSelected(Math.floor(Math.random() * anecdotes.length))
 
   const handleVote = () => {
 
@@ -51,7 +51,7 @@ const App = () => {
       <p>{anecdotes[selected]}</p>
       <p>has {votes[selected] || 0} votes</p>
       <button onClick={handleVote}>vote</button>
-      <button onClick={handleNextAnectote}>next anecdotes</button>
+      <button onClick={handleNextAnecdote}>next anecdotes</button>
     </section>
     <section>
       <h1>Anecdote with most votes</h1>
