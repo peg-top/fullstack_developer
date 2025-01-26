@@ -3,26 +3,26 @@ import { useState, useEffect } from 'react'
 import Filtered from './Filtered'
 import AddPerson from './AddPeson'
 import ShowPeople from './ShowPeople'
-import axios from 'axios'
+import { getAll, create, update, del } from './network'
 
 
 const App = () =>{
 
   console.log('App component')
 
-  useEffect(() => {
-    console.log('effect')
-    axios.get('http://localhost:3001/persons').then(response => {
-      console.log('promise fulfilled')
-      console.log(response)
-      setPersons(response.data)
-    })
-  }, [])
-
   const [persons, setPersons] = useState([])
   const [newPersonName, setNewPerson] = useState('')
   const [newPersonNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
+
+  useEffect(() => {
+    console.log('effect')
+    getAll().then(initialPersons => {
+      console.log('promise fulfilled')
+      console.log(initialPersons)
+      setPersons(initialPersons)
+    })
+  }, [])
 
   const handleNameInput = (event) => {
     console.log('New Person Name', event.target.value)
@@ -51,15 +51,24 @@ const App = () =>{
         number: Math.floor(Math.random() * 100000000)
       }
       // setPersons([...persons, newPerson])
-      axios.post('http://localhost:3001/persons', newPerson).then(response => {
-        console.log('promise fulfilled')
-        console.log(response)
-        setPersons([...persons, response.data])
+      create(newPerson).then(returnedPerson => {
+        console.log('Returned Person', returnedPerson)
+        setPersons(persons.concat(returnedPerson))
       })
       setNewPerson('')
       setNewNumber('')
     }
   }
+
+const deletePerson = (id) => {
+  const person = persons.find(person => person.id === id)
+  if (window.confirm(`Delete ${person.name} ?`)) {
+    del(id).then(response => {
+      console.log('Delete Response', response)
+      setPersons(persons.filter(person => person.id !== id))
+    })
+  }
+}
   
   return (
     <>
@@ -85,6 +94,7 @@ const App = () =>{
         <ShowPeople
           persons={persons}
           filterName={filterName}
+          deletePerson={deletePerson}
         />
       </div>
     </>
