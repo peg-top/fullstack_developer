@@ -22,7 +22,10 @@ const Btn = ({ text, handleClick }) => {
 
 const StatisticsLine = ({ text, value }) => {
   return (
-    <li>{text} {value}</li>
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
   )
 }
 
@@ -68,11 +71,11 @@ const Statistics = ({ good, neutral, bad }) => {
     <section>
       <h1>Statistics</h1>
       {isShowStatistics ? 
-        <ul>
+        <table>
           {statistics.map(({ id, text, value }) => (
             <StatisticsLine key={id} text={text} value={value()} />
           ))}
-        </ul>
+        </table>
         : <p>No feedback given</p>
       }
     </section>
