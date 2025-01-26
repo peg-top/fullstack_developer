@@ -8,6 +8,7 @@ const App = () =>{
   const [persons, setPersons] = useState([])
   const [newPersonName, setNewPerson] = useState('')
   const [newPersonNumber, setNewNumber] = useState('')
+  const [filterName, setFilterName] = useState('')
 
   const handleNameInput = (event) => {
     console.log('New Person Name', event.target.value)
@@ -17,6 +18,11 @@ const App = () =>{
   const handleNumberInput = (event) => {
     console.log('New Person Number', event.target.value)
     setNewNumber(event.target.value)
+  }
+
+  const handleFilterInput = (event) => {
+    console.log('Filter Name', event.target.value)
+    setFilterName(event.target.value)
   }
 
   const addPerson = (event) => {
@@ -39,23 +45,38 @@ const App = () =>{
   return (
     <>
       <h2>Phonebook</h2>
-      <form id="phoneBook" onSubmit={addPerson}>
-        <div>
-        <label htmlFor="phoneBook">name: 
-          <input type="text" id="phoneBook" name="phoneBook" value={newPersonName} onChange={handleNameInput}/>
+      <div>
+        <label htmlFor="filter">filter shown with: 
+          <input type="text" id="filter" name="filter" value={filterName} onChange={handleFilterInput}/>
         </label>
+      </div>
+      <div>
+        <h2>Add a new</h2>
+        <form id="phoneBook" onSubmit={addPerson}>
+          <div>
+          <label htmlFor="phoneBook">name: 
+            <input type="text" id="phoneBook" name="phoneBook" value={newPersonName} onChange={handleNameInput}/>
+          </label>
+          </div>
+          <div>
+          <label htmlFor="phoneBook">number: 
+            <input type="text" id="phoneBook" name="phoneBook" value={newPersonNumber} onChange={handleNumberInput}/>
+          </label>
+          </div>
+          <button type="submit">add</button>
+        </form>
         </div>
         <div>
-        <label htmlFor="phoneBook">number: 
-          <input type="text" id="phoneBook" name="phoneBook" value={newPersonNumber} onChange={handleNumberInput}/>
-        </label>
-        </div>
-        <button type="submit">add</button>
-      </form>
       <h2>Numbers</h2>
       <ul>
-        {persons.map((person) => <li key={person.id}>{person.name} {person.number}</li>)}
+        {persons.map((person) => 
+          person.name.includes(filterName)
+            ? 
+              <li key={person.id}>{person.name} {person.number}</li>
+            : null
+        )}
       </ul>
+    </div>
     </>
   )
 }
