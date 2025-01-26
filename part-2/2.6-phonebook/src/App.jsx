@@ -7,10 +7,16 @@ const App = () =>{
 
   const [persons, setPersons] = useState([])
   const [newPersonName, setNewPerson] = useState('')
+  const [newPersonNumber, setNewNumber] = useState('')
 
-  const handleInput = (event) => {
+  const handleNameInput = (event) => {
     console.log('New Person Name', event.target.value)
     setNewPerson(event.target.value)
+  }
+
+  const handleNumberInput = (event) => {
+    console.log('New Person Number', event.target.value)
+    setNewNumber(event.target.value)
   }
 
   const addPerson = (event) => {
@@ -26,6 +32,7 @@ const App = () =>{
       }
       setPersons([...persons, newPerson])
       setNewPerson('')
+      setNewNumber('')
     }
   }
   
@@ -33,8 +40,16 @@ const App = () =>{
     <>
       <h2>Phonebook</h2>
       <form id="phoneBook" onSubmit={addPerson}>
-        <label htmlFor="phoneBook">name: </label>
-        <input type="text" id="phoneBook" name="phoneBook" value={newPersonName} onChange={handleInput}/>
+        <div>
+        <label htmlFor="phoneBook">name: 
+          <input type="text" id="phoneBook" name="phoneBook" value={newPersonName} onChange={handleNameInput}/>
+        </label>
+        </div>
+        <div>
+        <label htmlFor="phoneBook">number: 
+          <input type="text" id="phoneBook" name="phoneBook" value={newPersonNumber} onChange={handleNumberInput}/>
+        </label>
+        </div>
         <button type="submit">add</button>
       </form>
       <h2>Numbers</h2>
