@@ -4,8 +4,50 @@ import axios from 'axios'
 
 const url = "https://studies.cs.helsinki.fi/restcountries/api/all"
 const urlName = 'https://studies.cs.helsinki.fi/restcountries/api/name/'
+const API_KEY = import.meta.env.VITE_WEATHER_API_KEY
+
+
+const CapitalWeather = ({ capital, capitalInfo }) => {
+
+  console.log(`CapitaWeather: { capital: ${capital}, capitalInfo: ${capitalInfo} }`)
+
+  const [lat, lon] = capitalInfo.latlng
+  const [weather, setWeather] = useState(null)
+  const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}`
+
+  console.log('URL:', url)
+
+  useEffect(() => {
+    axios.get(url).then(response => {
+      console.log('Weather Promise fulfilled')
+      console.log(response)
+      setWeather(response.data)
+    }).catch(error => {
+      console.log('Error:', error)
+    })
+  }
+  , [])
+
+
+  return(
+    <>
+      { weather ? (
+        <>
+          <h1>Weather in {capital}</h1>
+          <p>Temperature: {Math.round(weather.main.temp - 273.15)}°C</p>
+          <img src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}></img>
+          <p>wind {weather.wind.speed}</p>
+        </>
+      )
+      :
+        <p>Loading weather data...</p>
+      }
+    </>
+  )
+}
 
 const CountryInfo = ({ country }) => {
+  console.log('CountryInfo:', country)
   return (
     <>
       <h1>{country.name.common}</h1>
@@ -18,13 +60,13 @@ const CountryInfo = ({ country }) => {
         )}
       </ul>
       <img src={country.flags.png} alt="flag" width="100" height="100"/>
+      <CapitalWeather capital={country.capital} capitalInfo={country.capitalInfo} />
     </>
   )
 }
 
 
 const CountryLine = ({ country }) => {
-
   const [isShow, setShow] = useState(false)
 
   console.log('CountryLine:', country)
@@ -37,13 +79,16 @@ const CountryLine = ({ country }) => {
     <li key={country.fifa}>
       {country.name.common}
       <button onClick={handleClick}>{isShow ? 'Hide' : 'Show'}</button>
-      {isShow && <CountryInfo country={country} />}
+      {isShow && <CountryInfo country={country}/>}
     </li>
   )
 }
 
 
 const ListOfCountries = ({ countries }) => {
+
+  console.log('ListOfCountries:', countries)
+
   return (
     <ul>
       {countries.map((country) => 
