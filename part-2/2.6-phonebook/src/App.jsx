@@ -4,6 +4,19 @@ import Filtered from './Filtered'
 import AddPerson from './AddPeson'
 import ShowPeople from './ShowPeople'
 import { getAll, create, update, del } from './network'
+import './main.css'
+
+function Notification({ message }) { 
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className="error">
+      {message}
+    </div>
+  )
+}
 
 
 const App = () =>{
@@ -14,6 +27,7 @@ const App = () =>{
   const [newPersonName, setNewPerson] = useState('')
   const [newPersonNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     console.log('effect')
@@ -60,6 +74,8 @@ const App = () =>{
           setPersons(persons.map(person => person.id === findedPerson.id ?  returnedUpdatedPerson : person))
         })
 
+        setErrorMessage(`Updated ${newPersonName}`)
+
         setNewPerson('')
         setNewNumber('')
 
@@ -81,6 +97,7 @@ const App = () =>{
         setPersons(persons.concat(returnedPerson))
       })
 
+      setErrorMessage(`Added ${newPersonName}`)
       setNewPerson('')
       setNewNumber('')
     }
@@ -93,6 +110,7 @@ const deletePerson = (id) => {
       console.log('Delete Response', response)
       setPersons(persons.filter(person => person.id !== id))
     })
+    setErrorMessage(`Deleted ${person.name}`)
   }
 }
   
@@ -100,6 +118,7 @@ const deletePerson = (id) => {
     <>
       <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} />
         <Filtered
           filterName={filterName}
           handleFilterInput={handleFilterInput}
