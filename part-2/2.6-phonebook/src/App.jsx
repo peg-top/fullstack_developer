@@ -42,19 +42,45 @@ const App = () =>{
   const addPerson = (event) => {
     event.preventDefault()
 
-    if (persons.find(person => person.name === newPersonName)) {
-      alert(`${newPersonName} is already added to phonebook`)
-    } else {
-      const newPerson = {
-        // id: persons.length + 1,
-        name: newPersonName,
-        number: Math.floor(Math.random() * 100000000)
+    const findedPerson = persons.find(person => person.name === newPersonName)
+
+    console.log('Person', findedPerson)
+
+    if (findedPerson) {
+
+      console.log('Update person')
+      console.log('Person ID', findedPerson.id, 'Person Name', findedPerson.name, 'Person Number', findedPerson.number)
+
+      if (window.confirm(`${newPersonName} is already added to phonebook, replace the old number with a new one?`)) {
+        
+        const updatedPerson = { ...findedPerson, number: newPersonNumber }
+
+        update(findedPerson.id, updatedPerson).then(returnedUpdatedPerson => {
+          console.log('Returned Updated Person', returnedUpdatedPerson)
+          setPersons(persons.map(person => person.id === findedPerson.id ?  returnedUpdatedPerson : person))
+        })
+
+        setNewPerson('')
+        setNewNumber('')
+
       }
-      // setPersons([...persons, newPerson])
+      
+    } else {
+
+      console.log('Add new peson')
+
+      const newPerson = {
+        name: newPersonName,
+        number: newPersonNumber || Math.floor(Math.random() * 100000000)
+      }
+
+      console.log('New Person', newPerson)
+  
       create(newPerson).then(returnedPerson => {
         console.log('Returned Person', returnedPerson)
         setPersons(persons.concat(returnedPerson))
       })
+
       setNewPerson('')
       setNewNumber('')
     }
