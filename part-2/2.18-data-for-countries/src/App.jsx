@@ -5,6 +5,54 @@ import axios from 'axios'
 const url = "https://studies.cs.helsinki.fi/restcountries/api/all"
 const urlName = 'https://studies.cs.helsinki.fi/restcountries/api/name/'
 
+const CountryInfo = ({ country }) => {
+  return (
+    <>
+      <h1>{country.name.common}</h1>
+      <p>capital: {country.capital}</p>
+      <p>area: {country.area}</p>
+      <h2>languages</h2>
+      <ul>
+        {Object.values(country.languages).map((language) => 
+        <li key={language}>{language}</li>
+        )}
+      </ul>
+      <img src={country.flags.png} alt="flag" width="100" height="100"/>
+    </>
+  )
+}
+
+
+const CountryLine = ({ country }) => {
+
+  const [isShow, setShow] = useState(false)
+
+  console.log('CountryLine:', country)
+
+  const handleClick = () => {
+    setShow(!isShow)
+  }
+
+  return(
+    <li key={country.fifa}>
+      {country.name.common}
+      <button onClick={handleClick}>{isShow ? 'Hide' : 'Show'}</button>
+      {isShow && <CountryInfo country={country} />}
+    </li>
+  )
+}
+
+
+const ListOfCountries = ({ countries }) => {
+  return (
+    <ul>
+      {countries.map((country) => 
+        <CountryLine key={country.name.common} country={country} />
+      )}
+    </ul>
+  )
+}
+
 const App = () =>{
 
   const [search, setSearch] = useState('')
@@ -41,32 +89,21 @@ const App = () =>{
           <input type="text" value={search} onChange={handleSearchChange} />
         </p>
 
-        { search !== "" ?
-          ( findedCountries.length > 10)
-            ?
-              (<p>Too many matches, specify another filter</p>)
-            : 
-              ((findedCountries.length === 1)
+        { search === "" 
+          ? <p>Please enter a serch term</p>
+          : (
+
+          findedCountries.length > 10
+            ? <p>Too many matches, specify another filter</p>
+            : (
+              findedCountries.length === 1
                 ?
-                  (<>
-                    <h1>{findedCountries[0].name.common}</h1>
-                    <p>capital: {findedCountries[0].capital}</p>
-                    <p>area: {findedCountries[0].area}</p>
-                    <h2>languages</h2>
-                    <ul>
-                      {Object.values(findedCountries[0].languages).map((language) => 
-                      <li key={language}>{language}</li>
-                      )}
-                    </ul>
-                    <img src={findedCountries[0].flags.png} alt="flag" width="100" height="100"/>
-                  </>)
+                  <CountryInfo country={findedCountries[0]} />
                 :
-                  (<ul>
-                    {findedCountries.map((country) => 
-                    <li key={country.fifa}>{country.name.common}</li>
-                    )}
-                  </ul>))
-            : <p>Please enter a serch term</p>}
+                  <ListOfCountries countries={findedCountries} />
+              )
+            )
+          }
         
     </>
   )
